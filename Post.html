@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js/mustache.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+
+    <style>
+        #container{
+            width: 60%;
+            padding:10px;
+            border: 1px solid #bfbfbf;
+            margin: 5px;
+            box-shadow: 1px 1px 20px #000;
+            margin-left: 300px;
+        }
+        .Post{
+            text-align: center;
+        }
+        .body-post{
+            font-size: 12px;
+        }
+        .tittle{
+            font-size: 16px;
+        }
+        .container-url{
+            display: inline;
+            padding-left: 20px;
+        }
+
+        .forum{
+            display: inline-flex;
+        }
+        .scale{
+            width: 25px;
+            background-color: #ffffff;
+
+        }
+        .users-icon{
+            display: inline-flex;
+            padding-left: 20px;
+            padding-right: 20px;
+            background-color: #ffffff;
+            border: 1px solid #bfbfbf;
+            margin: 5px;
+            box-shadow: 1px 1px 20px #000;
+            cursor: pointer;
+            transition: transform 1s;
+        }
+      
+        .users-icon:hover{
+            transform: scale(1.2, 1.2);
+        }
+        .users-forum{
+            padding-top: 5px;
+            color: #000;
+            font-size: 20px;
+
+        }
+    </style>
+
+
+</head>
+<body>
+    <section>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-url">
+            <h1 class="navbar-brand forum" href="#">Forum of Mibzar Galarza</h1>
+
+            <div class="users-icon">
+            <a class="navbar-brand" href="index.html"><img src = "img/icon.svg" class= "scale"></a>
+            <a class="navbar-brand" href="index.html"><h1 class="users-forum">Users</h1></a>
+            </div>
+
+            </div>
+        </nav>
+    </section>
+   
+    
+    
+    <section id="container"></section>
+
+    <script id="template" type="x-tmpl-mustache">
+        {{#.}}
+        <div class="card">
+
+        <img src="img/avatars/{{userId}}.png" alt="" class="card-img-top">
+
+
+        <div class="card-body">
+            <h5>Post:</h5>
+            <h5 class="tittle">{{title}}</h5>
+            <h6 class="body-post">{{body}}</h6>
+        </div>
+
+        <div>
+        <ul class="list-group list-group-flush">
+            
+            <li class="list-group-item"></li>
+            <a class="Post" href="Comments.html?id={{id}}">Whatch the Comments...</a>
+            <li class="list-group-item"></li>
+            <a class="Post" href="index.html">Go back...</a>
+        </ul>
+        </div>
+
+        </div>
+        {{/.}}
+    </script>
+
+
+
+    <script>
+        async function GetData(){
+            const urlPage = new URLSearchParams(window.location.search);
+            const idUrl = urlPage.get("id");
+            const base='https://jsonplaceholder.typicode.com/users/';
+            let url=base+idUrl+'/posts'
+
+            let response = await fetch(url);
+            let json = await response.json();
+
+            console.log(json);
+            let container = document.getElementById('container');
+            let template = document.getElementById("template").innerHTML;
+            let html = Mustache.render(template,json);
+
+            container.innerHTML = html;
+
+            //json.forEach(element => {
+            //    container.innerHTML = container.innerHTML + '<p>'+element.address.street+'</p>'
+            //});
+        };
+        GetData();
+    </script>
+</body>
+</html>
